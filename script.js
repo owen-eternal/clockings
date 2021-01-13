@@ -27,7 +27,7 @@ function init() {
         headers: { "Content-Type" : "application/json"}
     }
     
-    fetch('http://127.0.0.1:5000/upload', options);
+    fetch('http://127.0.0.1:5000//api/1.0/clockings/upload', options);
    
 }
 
