@@ -17,4 +17,4 @@ class DevConfig(BaseConfig):
 
 
 class ProdConfig(BaseConfig):
-    DEGUG = True
+    DEGUG = False
