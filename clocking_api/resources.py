@@ -1,10 +1,12 @@
 import os
 import secrets
 from flask import Blueprint
+from clocking_api import db
 from base64 import decodebytes
 from flask_restful import Resource
 from flask_cors import cross_origin
 from flask import request, current_app
+from .models import EmployClockings
 
 clocking_bp = Blueprint('clockings_bp', __name__)
 
@@ -25,8 +27,14 @@ def save_image(base64_img, root):
 @clocking_bp.route('/api/1.0/clockings/upload', methods=["POST"])
 @cross_origin()
 def upload():
-    req = request.get_json()
-    root_path = current_app.root_path
-    f_name = save_image(req['png'], root_path)
+    if req:
+        req = request.get_json()
+        root_path = current_app.root_path
+        f_name = save_image(req['png'], root_path)
+        empl = EmployClockings(
+            status=req['status'], image=f_name,
+            location=req['location'],  comment=req['comment'])
+        db.session.add(empl)
+        db.session.commit()
     print(f'{f_name} has been saved int the database!')
     return "hi"
