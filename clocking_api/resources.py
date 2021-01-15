@@ -1,6 +1,6 @@
 import os
 import secrets
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from clocking_api import db
 from base64 import decodebytes
 from flask_restful import Resource
@@ -27,14 +27,7 @@ def save_image(base64_img, root):
 @clocking_bp.route('/api/1.0/clockings/upload', methods=["POST"])
 @cross_origin()
 def upload():
-    if req:
-        req = request.get_json()
-        root_path = current_app.root_path
-        f_name = save_image(req['png'], root_path)
-        empl = EmployClockings(
-            status=req['status'], image=f_name,
-            location=req['location'],  comment=req['comment'])
-        db.session.add(empl)
-        db.session.commit()
-    print(f'{f_name} has been saved int the database!')
-    return "hi"
+    req = request.get_json()
+    root_path = current_app.root_path
+    f_name = save_image(req['png'], root_path)
+    return jsonify({"response": "has been saved int the database!"}), 200
